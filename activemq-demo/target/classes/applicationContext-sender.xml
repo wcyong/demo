@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <import resource="applicationContext-common.xml"/>
+
+    <!-- 默认的目的地队列定义 -->
+    <bean id="activeMQQueue" class="org.apache.activemq.command.ActiveMQQueue">
+        <constructor-arg index="0" value="queue-test1"/>
+    </bean>
+
+    <!-- JmsTemplate 定义 -->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <property name="connectionFactory" ref="connectionFactory"/>
+        <property name="defaultDestination" ref="activeMQQueue"/>
+    </bean>
+
+    <!-- 消息发送者定义 -->
+    <bean id="messageSender" class="org.wcy.activimq.MessageSender">
+        <constructor-arg index="0" ref="jmsTemplate"/>
+    </bean>
+
+</beans>
